@@ -1,0 +1,200 @@
+{% extends 'home/base.html' %}
+
+{% block body_block %}
+<div class="container">
+
+        <div class="card mb-3">
+            <div class="row no-gutters">
+              <div class="col-md-4">
+                <img src="{{food.image}}" class="rounded border border-dark" width="100%">
+                <span class="badge badge-info" style="width:100%;">Ingredients</span>
+              <ul class="list-group list-group" style="list-style-type: circle;">
+            {% for l in food.steps %}
+            <li class="list-group-item bg-danger">{{l}}</li>
+            {% endfor %}
+            
+          </ul>
+              </div>
+              <div class="col-md-8">
+                <div class="card-body border border-dark">
+                  <h5 class="card-title alert alert-success">{{food.foodname}} 
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'home:add-cart' upk=user.pk  fpk=foodid %}">  
+                    <input type="submit"  class="btn btn-danger" value="Add to Cart">
+                    </a>
+                    {% endif %}</h5>
+                  
+
+                  <table class="table table-info table-bordered table-hover   ">
+                    <thead>
+                      <tr class="bg-warning">
+                        <th scope="col">Sr No.</th>
+                        <th scope="col">Nutrients</th>
+                        <th scope="col">Value</th>
+                        <th scope="col">Units</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row">1</th>
+                        <td>Calories</td>
+                        <td>{{food.calories}}</td>
+                        <td>kcal</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">2</th>
+                        <td>Protein</td>
+                        <td>{{food.protein}}</td>
+                        <td>g</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">3</th>
+                        <td>Fat</td>
+                        <td>{{food.fat}}</td>
+                        <td>g</td>
+                      </tr>
+                       <tr>
+                        <th scope="row">4</th>
+                        <td>Carbs</td>
+                        <td>{{food.carbs}}</td>
+                        <td>g</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">5</th>
+                        <td>Fiber</td>
+                        <td>{{food.fiber}}</td>
+                        <td>g</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">6</th>
+                        <td>Saturated Fat</td>
+                        <td>{{food.saturated}}</td>
+                        <td>g</td>
+                      </tr>
+
+                      <tr>
+                        <th scope="row">7</th>
+                        <td>Monounsaturated Fat</td>
+                        <td>{{food.monounsaturated}}</td>
+                        <td>g</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">8</th>
+                        <td>Cholestrol</td>
+                        <td>{{food.cholestrol}}</td>
+                        <td>mg</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">9</th>
+                        <td>Sugar</td>
+                        <td>{{food.sugar}}</td>
+                        <td>g</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">10</th>
+                        <td>Magnesium</td>
+                        <td>{{food.magnesium}}</td>
+                        <td>mg</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">11</th>
+                        <td>Iron</td>
+                        <td>{{food.iron}}</td>
+                        <td>mg</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">12</th>
+                        <td>Zinc</td>
+                        <td>{{food.zinc}}</td>
+                        <td>mg</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">13</th>
+                        <td>Vitamin A</td>
+                        <td>{{food.vita}}</td>
+                        <td>µg</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">14</th>
+                        <td>Vitamin C</td>
+                        <td>{{food.vitc}}</td>
+                        <td>µg</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">15</th>
+                        <td>Vitamin E</td>
+                        <td>{{food.vite}}</td>
+                        <td>µg</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">16</th>
+                        <td>Vitamin K</td>
+                        <td>{{food.vitk}}</td>
+                        <td>µg</td>
+                      </tr>
+               
+                      
+                     
+                    </tbody>
+                  </table>
+
+
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                      <b>Diet:</b>
+                      {% for x in food.dietlabel %}
+                      <button class="btn btn-info">{{x}}</button>
+                      {% endfor %}
+                    </li>
+                  </ul>
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                      <b>Health:</b>
+                      {% for x in food.healthlabel %}
+                      <button class="btn btn-info">{{x}}</button>
+                      {% endfor %}
+                    </li>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="row">
+            <div class="col-md-4"> -->
+          
+        <!-- </div>
+        </div> -->
+
+      </div>
+
+
+      <div class="container">
+        <canvas id="myChart"></canvas>
+      </div>
+
+      <script>
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var chart = new Chart(ctx, {
+          // The type of chart we want to create
+          type: 'pie',
+
+          // The data for our dataset
+          data: {
+              labels:{{metric|safe}},
+              datasets: [{
+                  label: 'My First dataset',
+                  backgroundColor: ['rgb(245, 203, 66)','rgb(27, 17, 66)','rgb(179, 26, 23)'],
+                  borderColor: 'rgb(0,0,0)',
+                  borderWidth:4,
+                  data: {{details|safe}}
+              }]
+          },
+
+          // Configuration options go here
+          options: {
+            
+          }
+      }); 
+      </script>
+
+{% endblock %}  

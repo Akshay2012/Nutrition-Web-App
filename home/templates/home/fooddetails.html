@@ -1,0 +1,55 @@
+{% extends 'home/base.html' %}
+{% load custom_tags %}
+
+{% block body_block %}
+      <div class="container">
+
+      {% for i in count %}
+        {% if forloop.first %}<div class="row">{% endif %}
+        <div class="col-md-4" style="margin-top: 10%;">
+          <div class="card" >
+          <img src="{{food.image|byindex:i}}" class="card-img-top" alt="...">
+          <div class="card-body" >
+            <h5 class="card-title"> {{ food.foodname|byindex:i }}</h5>
+            <!-- <i class="material-icons">add_circle</i> -->
+          </div>
+          <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><em><b>Servings:</b></em> {{ food.servings|byindex:i }}</li>
+                    <li class="list-group-item"><em><b>Calories:</b></em> {{ food.calories|byindex:i }}kcal</li>
+                    <li class="list-group-item"><em><b>Carbs:</b></em> {{ food.carbs|byindex:i }}g</li>
+                    <li class="list-group-item"><em><b>Fats:</b></em> {{ food.fat|byindex:i }}g</li>
+                    <li class="list-group-item"><em><b>Protein:</b></em> {{ food.protein|byindex:i }}g</li>
+                    
+                    <li class="list-group-item">
+                      <b>Diet Labels: </b>
+                      {% for x in food.dietlabel|byindex:i %}
+                      <button type="button" class="btn btn-info"> {{x}} </button>
+                      
+                      {% endfor %}
+                  </li>
+                  <li class="list-group-item">
+                      <b>Health labels:</b>
+                      {% for x in food.healthlabel|byindex:i %}
+                      <button type="button" class="btn btn-info"> {{x}} </button>
+                      {% endfor %}
+                  </li>
+          </ul>
+          
+          <a href="{% url 'home:recipe' urll=food.urll|byindex:i %}" class="stretched-link">
+          </a>
+          <!-- Stretched link Makes the whole card Clickable  -->
+
+        </div>
+            
+        </div>
+        {% if forloop.counter|divisibleby:3 %}</div><div class="row">{% endif %}
+        {% if forloop.last %}</div>{% endif %}
+      {% endfor %}
+
+    </div>
+
+
+
+
+{% endblock %}
+

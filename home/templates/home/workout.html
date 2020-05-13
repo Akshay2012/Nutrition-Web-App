@@ -1,0 +1,21 @@
+{% extends 'home/base.html' %}
+{% block body_block %}
+
+
+    {% for x in muscle %}
+    <button class="btn btm-secondary">{{x}}</button>
+    {% endfor %}
+
+    <div class="container">
+        <ul class="list-group">
+
+            {% for x,y in exercise_muscle.items %}
+            <li class="list-group-item">
+                <b>{{ x }}</b> - {{y}}
+            </li>
+            {% endfor %}
+        </ul>
+
+    </div>
+
+{% endblock %}
