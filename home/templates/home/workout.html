@@ -1,21 +1,102 @@
 {% extends 'home/base.html' %}
 {% block body_block %}
 
+<div class="container">
 
-    {% for x in muscle %}
-    <button class="btn btm-secondary">{{x}}</button>
-    {% endfor %}
+<nav>
+    {% for y in body_parts %}
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+      <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">{{ y }}</a>
+        {% endfor %}
+</nav>
+<div class="jumbotron">
+--------ARMS-----
+{% for x in arms_obj %}
+<li>
+    {{x}}
+</li>
+{% endfor %}
+</div>
 
-    <div class="container">
-        <ul class="list-group">
 
-            {% for x,y in exercise_muscle.items %}
-            <li class="list-group-item">
-                <b>{{ x }}</b> - {{y}}
-            </li>
-            {% endfor %}
-        </ul>
+<div class="jumbotron">
 
-    </div>
+----LEGS-----
+{% for x in legs_obj %}
+    <li>{{x}}</li>
+{% endfor %}
+</div>
+
+<div class="jumbotron">
+
+-------chest-----
+{% for x in chest_obj %}
+    <li>{{x}}</li>
+{% endfor %}
+</div>
+
+<div class="jumbotron">
+
+--------calves--------
+{% for x in calves_obj %}
+    <li>{{x}}</li>
+{% endfor %}
+</div>
+
+<div class="jumbotron">
+
+<b>------shoulders------</b>
+
+{% for x in shoulders_obj %}
+    <li>{{x}}</li>
+{% endfor %}
+</div>
+
+<div class="jumbotron">
+-------ABS------
+{% for x in abs_obj %}
+    <li>{{x}}</li>
+{% endfor %}
+</div>
+
+<div class="jumbotron">
+--------<b>back</b>-==-----
+{% for x in back_obj %}
+    <li>{{x}}</li>
+{% endfor %}
+</div>
+<!--       
+        <table class="table table-bordered table-hover">
+            <thead class="table table-info">
+                <tr>
+                    <td>exercise name</td>
+                    <td> Description</td>
+                    <td>Target Muscle</td>
+                    <td>Equipments</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for x in exercise_objects %}
+                <tr>
+                    <td>{{x.exercise_name}}</td>
+                    <td>{{x.description}}</td>
+                    <td>{{x.target_muscle}}</td>
+                    <td>
+                    {% for y in x.equipment%}
+                        {{y.name}}<br>
+                    {% endfor %}
+                    </td>
+                </li>
+                
+                </tr>
+                {% endfor %}
+    
+            </tbody>
+        </table>
+     -->
+    
+        
+</div>
+
 
 {% endblock %}

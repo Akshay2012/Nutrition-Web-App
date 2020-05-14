@@ -1,7 +1,8 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from fatsecret import Fatsecret
-from .models import food,user_foodlist
+from .models import food,user_foodlist,exercise
+
 # from .models import food
 from .forms import food_form,user_register,update_profile_form,update_user_form
 from django.contrib import messages
@@ -18,31 +19,59 @@ from urllib.request import urlretrieve
 
 # from django.Http import JsonResponse
 
+
+
+
 def workout(request):
-    response=requests.get("https://wger.de/api/v2/exerciseinfo/")
-    response=response.json()
-    exercise_muscle={}
-    #----Name of exercise ---> Muscle trained.
-    count=10
-    while(count!=0):
-        for x in response['results']:
-
-            exercise_muscle[x['name']]=x['category']['name']
-            # print(x['name'],"---->",x['category']['name'])
-        
-        count-=1
-        response=requests.get(response['next']).json()
-
-    #---Types of Muscle..
-    response2=requests.get('https://wger.de/api/v2/muscle/')
-    response2=response2.json()
-    muscle_type=[]
-    for x in response2["results"]:
-        muscle_type.append(x["name"])
+    
     
 
+    #Just to save all exercise to my database.
+
+    # param={'language':2}  #---LANGUAGE ID=2 for english
+    # qstr=urlencode(param)    
+    # response=requests.get("https://wger.de/api/v2/exerciseinfo/",params=qstr)
+    # response=response.json()
     
-    return render(request,'home/workout.html',context={'exercise_muscle':exercise_muscle,'muscle':muscle_type})
+
+
+    # #----Name of exercise ---> Muscle trained.
+    # count=50
+    # while(count!=0):
+
+    #     for x in response['results']:
+    #         if x['name']!="" and  x['category']['name']!="" and x["description"]!="" and    x["equipment"]!=[]:
+    #             # exercise_muscle[x['name']]=x['category']['name']
+    #             try:
+    #                 exercise_obj,created = exercise.objects.get_or_create(exercise_name=x['name'],target_muscle=x['category']['name'],target_muscle_id=x['category']['id'],
+    #                                                                                 description=x["description"],equipment=x['equipment'])
+                                                                                    
+    #             except MultipleObjectsReturned:
+    #                 continue
+    #             if created:
+    #                 exercise_obj.save()
+    
+    #     count-=1
+    #     response=requests.get(response['next'],params=qstr).json()
+
+
+
+    id_part_dictionary={8:'Arms',10:'Abs',14:'Calves',9:'Legs',13:'Shoulders',11:'Chest',12:'Back'}
+    arms_obj=exercise.objects.filter(target_muscle_id=8).all()
+    legs_obj=exercise.objects.filter(target_muscle_id=9).all()
+    abs_obj=exercise.objects.filter(target_muscle_id=10).all()
+    chest_obj=exercise.objects.filter(target_muscle_id=11).all()
+    back_obj=exercise.objects.filter(target_muscle_id=12).all()
+    shoulders_obj=exercise.objects.filter(target_muscle_id=13).all()
+    calves_obj=exercise.objects.filter(target_muscle_id=14).all()
+    
+    body_parts=['Arms','Legs','Chest','Back','Abs','Shoulders','Calves']
+    # for x in body_parts:
+
+    return render(request,'home/workout.html',context={"body_parts":body_parts,
+                                                        'arms_obj':arms_obj,'legs_obj':legs_obj,'abs_obj':abs_obj,
+                                                        'chest_obj':chest_obj,'back_obj':back_obj,'shoulders_obj':shoulders_obj,
+                                                        'calves_obj':calves_obj})
 
 
 

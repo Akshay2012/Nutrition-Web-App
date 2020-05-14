@@ -51,7 +51,16 @@ class user_foodlist(models.Model):
     
 
     
+class exercise(models.Model):
+    exercise_name=models.CharField(max_length=200)
+    target_muscle=models.CharField(max_length=200)
+    target_muscle_id=models.IntegerField(default=-1)
+    description=models.TextField(default="No description available")
+    equipment=ArrayField(models.CharField(max_length=100),default=list)     
 
+    def __str__(self):
+        return self.exercise_name
+    
 
 class food(models.Model):
     food_url=models.URLField(max_length=400,default="www.google.com")
