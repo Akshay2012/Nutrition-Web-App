@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 
 from django.contrib.postgres.fields import ArrayField
-
+from django.contrib.postgres.fields import JSONField
 
 
 class  profile(models.Model):
@@ -83,3 +83,10 @@ class food(models.Model):
     
     def get_absolute_url(self):
         return reverse("home:home-page")
+
+class NutritionPlan(models.Model):
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    description = models.CharField(max_length=1000,default = '')
+    plan = models.IntegerField(blank = True,null = True)
+    meal = models.IntegerField(blank = True,null = True)
+    meal_items= ArrayField(models.IntegerField(blank=True,null=True),default=list)

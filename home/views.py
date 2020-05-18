@@ -1,20 +1,24 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from fatsecret import Fatsecret
-from .models import food,user_foodlist
+from .models import food,user_foodlist,NutritionPlan
 # from .models import food
 from .forms import food_form,user_register,update_profile_form,update_user_form
 from django.contrib import messages
 
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-
+import json
 from django.views.generic import ListView,DetailView,CreateView
 from collections import defaultdict
 import requests
 from urllib.parse import urlencode
 from urllib.request import urlretrieve
+from rest_framework.decorators import api_view
+from .serializers import PlanSerializer
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 # from django.Http import JsonResponse
 
@@ -284,3 +288,58 @@ class foodlistview(ListView):
 # class fooddetailview(DetailView):
 #     model=models.food
 #     template_name='home/food_detailview.html'
+
+def nutrition(request,plan):
+    query = NutritionPlan.objects.filter(plan=plan)
+    return render(request,'home/nutrition.html',{'plan':query[0]})
+
+def nutrition_overview(request):
+    return render(request,'home/nutrition_overview.html')
+
+class PlanView(APIView):
+    def post(self,request):
+        serializer = PlanSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors)
+    
+@api_view(['POST'])
+def add_to_nutrition(request):
+    serializer = PlanSerializer(data=request.data)
+    print("serializer",serializer)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors)
+    # print(request)
+    # plan = NutritionPlan.objects.create(user=request.user,plan=p)
+    # plan.save()
+
+def edit(request):
+    return render(request,'home/edit.html')
+
+@api_view(['POST'])
+def add_meal_item(request,plan):
+    if request.method == 'POST':
+        li = []
+        print("Request",request)
+        query = NutritionPlan.objects.get(plan=plan)
+    
+        # li.append(request.data['meal_items'][0])
+        print("data",request.data['meal_items'][0])
+        print("query",query.meal_items)
+        query.meal_items.append(request.data['meal_items'][0])
+    
+        query.save()
+        # serializer = PlanSerializer(instance = query,data=request.data)
+        # # print("initial data",serializer.initial_data)
+        # # serializer.data.meal_items = serializer.data.meal_items.append(data)
+        # # print("data",serializer.data)
+        # serializer.save()
+        # return Response(serializer.data)
+        
+        # print(request.values)
+        # query.meal_items.append()
+        return HttpResponse(json.dumps({"success":True}), content_type="application/json")
+

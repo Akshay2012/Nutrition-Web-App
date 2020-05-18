@@ -1,7 +1,8 @@
 from django.contrib import admin
-from .models import food,profile
+from .models import food,profile,NutritionPlan
 
 # Register your models here.
 admin.site.register(food)
 admin.site.register(profile)
+admin.site.register(NutritionPlan)
 # admin.site.register(nutrition_values)

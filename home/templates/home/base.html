@@ -2,72 +2,193 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BASE</title>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <!-- <link rel="stylesheet" href="{% static 'styles.css' %}">  -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BASE</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link href="https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!-- <link rel="stylesheet" href="{% static 'styles.css' %}">  -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+  <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script> -->
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
+  <script src="{% static 'home/js/nutrition.js'  %} "></script>
 </head>
+
 <body>
-    <nav class="navbar navbar-expand-lg navbar-inverse bg-dark">
-        <a class="navbar-brand" href="{% url 'admin:index' %}">ADMIN</a>
-        
-        <div class="collapse navbar-collapse">
-          <ul class="navbar-nav mr-auto">
-            
-            <li class="nav-item ">
-                <a class="nav-link" href="{% url 'home:home-page' %}">HOME </a> 
-            </li>
+  <nav class="navbar navbar-expand-lg navbar-inverse bg-dark">
+    <a class="navbar-brand" href="{% url 'admin:index' %}">ADMIN</a>
 
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'home:workout' %}">Workout Info</a>
-            </li>
-            
-          </ul>
-        <div class="navbar-nav">
-          {% if user.is_authenticated %}
-          <a class="nav-item nav-link" href="{% url 'home:profile' %}">Profile</a>
-          <a class="nav-item nav-link" href="{% url 'home:logout' %}">Logout</a>
-          <a class="nav-item nav-link" href="{% url 'home:cart' %}">Cart</a>
- 
-          {% else %}
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav mr-auto">
 
-          <a class="nav-item nav-link" href="{% url 'home:login' %}">Login</a>
-          <a class="nav-item nav-link" href="{% url 'home:register-user' %}">Register</a>
-        
-          {% endif %}
-        </div>
-         
-        </div>
-      </nav>
+        <li class="nav-item ">
+          <a class="nav-link" href="{% url 'home:home-page' %}">HOME </a>
+        </li>
 
-      <div class="container">
-        <div class="col-md-12">
-          {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags}}">
-                  {{ message}} 
-                </div>
-            {% endfor %}
-          {% endif %}
-          {% block content %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'home:workout' %}">Workout Info</a>
+        </li>
+
+      </ul>
+      <div class="navbar-nav">
+        {% if user.is_authenticated %}
+        <a class="nav-item nav-link" href="{% url 'home:profile' %}">Profile</a>
+        <a class="nav-item nav-link" href="{% url 'home:logout' %}">Logout</a>
+        <a class="nav-item nav-link" href="{% url 'home:cart' %}">Cart</a>
+
+        {% else %}
+
+        <a class="nav-item nav-link" href="{% url 'home:login' %}">Login</a>
+        <a class="nav-item nav-link" href="{% url 'home:register-user' %}">Register</a>
+
+        {% endif %}
       </div>
+
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="col-md-12">
+      {% if messages %}
+      {% for message in messages %}
+      <div class="alert alert-{{ message.tags}}">
+        {{ message}}
       </div>
-      <div class="row">
+      {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+  <div class="row">
+    {% block content %}
+
+
+    {% endblock %}
+  </div>
+
+
+  {% block body_block %}
+
+
+  {% endblock %}
+
+  <script>
+    $(document).ready(function () {
+      console.log("Inside")
+      wgerInitIngredientAutocompleter()
+    })
+    async function add_plan() {
+      var plan = prompt("Enter your plan:")
+      await $.ajax({
+        url: 'https://wger.de/api/v2/nutritionplan/',
+        beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'Token e28b8de959a9b816168355b374282164b41f7da8'); },
+        type: 'POST',
+        data: {
+          'description': plan
+        },
+        success: function (data1) {
+          console.log(data1)
+          $.ajax({
+            url: 'https://wger.de/api/v2/meal/',
+            beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'Token e28b8de959a9b816168355b374282164b41f7da8'); },
+            type: 'POST',
+            data: {
+              'plan': data1.id
+            },
+            success: function (data2) {
+
+              console.log("data2", data2);
+
+
+              var $crf_token = $('[name="csrfmiddlewaretoken"]').attr('value');
+              $.ajax({
+                url: '/add_plan/',
+                data: JSON.stringify({
+                  'user': {{ user.id }},
+                'plan': data2.plan,
+                'meal': data2.id,
+                'description': data1.description
+                        }),
+            headers: { "X-CSRFToken": $crf_token },
+          contentType: "application/json",
+            type: 'POST',
+              success: function(out) {
+                console.log(out)
+                var url = "{% url 'home:nutrition' 123 %}"
+                var v = out.plan
+                document.location.href = url.replace('123', v)
+                console.log("Successfull");
+
+              }
+        })
+    }
+})
+                  }
+              })
+              
+          }
+
+    function add_meal_item(meal, plan) {
+      var $crf_token = $('[name="csrfmiddlewaretoken"]').attr('value');
+      // window.location.href = "https://wger.de/en/nutrition/meal/item/" + meal + "/item/add/"
+      var amount = $('#id_amount').val()
+      var weight_unit = $('#id_weight_unit').val()
+      var ingredient = $('#id_ingredient').val()
+      var name = $('#id_ingredient_searchfield').val()
+      var data = {
+        "meal": meal,
+        "amount": amount,
+        "ingredient": parseInt(ingredient),
+        "weight_unit": weight_unit ? parseInt(weight_unit) : null
+      }
+
+      console.log(data);
+      $.ajax({
+        url: "https://wger.de/api/v2/mealitem/",
+        beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'Token e28b8de959a9b816168355b374282164b41f7da8'); },
+        type: 'POST',
+        data: JSON.stringify(data),
+        contentType: "application/json",
+        success: function (response) {
+          console.log(response);
+          $.ajax({
+            url: '/add_meal_item/'+plan+'/',
+            data: JSON.stringify({
+              
+              'meal_items': [
+                response.id]
+              
+                        }),
+            headers: { "X-CSRFToken": $crf_token },
+      contentType: "application/json",
+        type: 'POST',
+          success: function(out) {
+            console.log(out)
+            // var url = "{% url 'home:nutrition' 123 %}"
+            // var v = out.plan
+            // document.location.href = url.replace('123', v)
+            console.log("Successfull");
+
+          }
+    })
+        }
+      })
       
-          
-          {% endblock %}
-        </div>
+    }
 
 
-        {% block body_block %}
 
 
-        {% endblock %}
-        
 
+  </script>
 </body>
+
 </html>

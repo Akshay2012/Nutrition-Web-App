@@ -27,7 +27,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
+# LOCALE = 'es' # Mandatory
+# LOCALE_FALLBACK = 'en' # Optional, default =  'en'
+# LOCALES = ['es'] # Mandatory
+# LOCALES_PATH = os.path.join(BASE_DIR, 'locales')
 # Application definition
 
 INSTALLED_APPS = [
@@ -39,6 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'home',
     'crispy_forms',
+    'rest_framework',
+    'django.contrib.postgres',
 ]
 
 MIDDLEWARE = [
@@ -80,7 +85,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'nutritiondb',
         'USER': 'postgres',
-        'PASSWORD': 'database',
+        'PASSWORD': 'password',
         'HOST': 'localhost',
     }
 }
@@ -103,6 +108,11 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+    )
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/

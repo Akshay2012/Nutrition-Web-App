@@ -6,7 +6,8 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import path,re_path
 from . import views
 from django.contrib.auth import views as auth_views
-
+from rest_framework import routers
+from rest_framework.urlpatterns import format_suffix_patterns
 
 app_name="home"
 
@@ -27,8 +28,14 @@ urlpatterns = [
     path('workout/',views.workout,name="workout"),
     
     path("cart",views.foodlistview.as_view(),name="cart"),
+    path("nutrition/<int:plan>",views.nutrition,name = "nutrition"),
+    path("overview/",views.nutrition_overview,name = "overview"),
+    path('add_plan/',views.add_to_nutrition,name='add-plan'),
+    path('edit/',views.edit,name='edit'),
+    # path('change_plan/',views.change_plan,name='change-plan'),
+    path('add_meal_item/<int:plan>/',views.add_meal_item,name='add-meal-item'),
+    
 ]
-
 urlpatterns+=staticfiles_urlpatterns()
 
 if settings.DEBUG:
